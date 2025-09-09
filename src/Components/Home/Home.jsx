@@ -1,7 +1,15 @@
-const Home = () => {
-    return (
-        <>123</>
-    )
-}
+import { styled } from "@mui/material";
 
-export default Home
+const Base = styled("div")({
+  flex: 1,
+});
+
+const Home = () => {
+  return (
+    <Base>
+      <div>456</div>
+    </Base>
+  );
+};
+
+export default Home;
