@@ -1,7 +1,11 @@
-const Layout = () => {
-    return (
-         <>123</>
-    )
-}
+import { Outlet } from "react-router-dom";
 
-export default Layout
+const Layout = () => {
+  return (
+    <div>
+      <Outlet />
+    </div>
+  );
+};
+
+export default Layout;
