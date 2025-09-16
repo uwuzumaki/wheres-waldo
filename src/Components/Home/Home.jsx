@@ -1,5 +1,4 @@
-import { styled, Button } from "@mui/material";
-
+import { styled, Button, TextField } from "@mui/material";
 const Base = styled("div")(({ theme }) => ({
   flex: 1,
   backgroundColor: theme.palette.secondary.main,
@@ -23,10 +22,26 @@ const CustomButton = styled(Button)({
   marginRight: "5%",
 });
 
+const CustomTextField = styled(TextField)(({ theme }) => ({
+  caretColor: theme.palette.primary.main,
+  color: theme.palette.primary.main,
+}));
+
 const Home = () => {
   return (
     <Base>
-      <Section>Username</Section>
+      <Section>
+        <CustomTextField
+          label="Enter a Name"
+          variant="standard"
+          focused
+          sx={{
+            input: {
+              color: "primary.main",
+            },
+          }}
+        />
+      </Section>
       <Section>
         <CustomButton variant="contained">Picture A</CustomButton>
         <CustomButton variant="contained">Picture B</CustomButton>
