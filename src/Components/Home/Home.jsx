@@ -61,7 +61,9 @@ const Home = () => {
         </CustomButton>
       </Section>
       <Section>
-        <Button variant="contained">Highscores!</Button>
+        <CustomLink to="/highscores">
+          <Button variant="contained">Highscores!</Button>
+        </CustomLink>
       </Section>
     </Base>
   );
