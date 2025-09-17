@@ -1,4 +1,6 @@
 import { styled, Button, TextField } from "@mui/material";
+import { Link } from "react-router-dom";
+
 const Base = styled("div")(({ theme }) => ({
   flex: 1,
   backgroundColor: theme.palette.secondary.main,
@@ -27,6 +29,11 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
   color: theme.palette.primary.main,
 }));
 
+const CustomLink = styled(Link)({
+  color: "inherit",
+  textDecoration: "none",
+});
+
 const Home = () => {
   return (
     <Base>
@@ -43,9 +50,15 @@ const Home = () => {
         />
       </Section>
       <Section>
-        <CustomButton variant="contained">Picture A</CustomButton>
-        <CustomButton variant="contained">Picture B</CustomButton>
-        <CustomButton variant="contained">Picture C</CustomButton>
+        <CustomButton variant="contained">
+          <CustomLink to="/picture/a">Picture A</CustomLink>
+        </CustomButton>
+        <CustomButton variant="contained">
+          <CustomLink to="/picture/b">Picture B</CustomLink>
+        </CustomButton>
+        <CustomButton variant="contained">
+          <CustomLink to="/picture/c">Picture C</CustomLink>
+        </CustomButton>
       </Section>
       <Section>
         <Button variant="contained">Highscores!</Button>
