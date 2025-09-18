@@ -1,6 +1,6 @@
 import Home from "./Components/Home/Home";
 import Layout from "./Components/Layout/Layout";
-import Picture from "./Components/Picture/Picture";
+import GameArea from "./Components/GameArea/GameArea";
 import Highscores from "./Components/Highscores/Highscores";
 
 const routes = [
@@ -9,7 +9,7 @@ const routes = [
     element: <Layout />,
     children: [
       { index: true, element: <Home /> },
-      { path: "/picture/:pictureID", element: <Picture /> },
+      { path: "/picture/:pictureID", element: <GameArea /> },
       { path: "/highscores", element: <Highscores /> },
     ],
   },
