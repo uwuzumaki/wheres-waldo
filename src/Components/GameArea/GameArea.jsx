@@ -3,10 +3,13 @@ import { styled } from "@mui/material";
 
 const Base = styled("div")({
   display: "flex",
+  width: "100%",
 });
 
 const Sidebar = styled("div")({
-  flex: 1,
+  flex: "0 1 250px",
+  minWidth: "20%",
+  borderRight: "1px solid #fff",
 });
 
 const Picture = styled("main")({
@@ -18,8 +21,8 @@ const GameArea = () => {
 
   return (
     <Base>
-      <p>picture</p>
-      <p>{params.pictureID}</p>
+      <Sidebar>picture</Sidebar>
+      <Picture>{params.pictureID}</Picture>
     </Base>
   );
 };
