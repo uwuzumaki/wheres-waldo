@@ -19,8 +19,8 @@ const Highscores = () => {
     <Base>
       <div>
         <p>Picture A</p>
-        {data.map((score) => (
-          <Player>
+        {data.map((score, index) => (
+          <Player key={index}>
             <p>name</p>
             <p>{score}</p>
           </Player>
@@ -28,8 +28,8 @@ const Highscores = () => {
       </div>
       <div>
         <p>Picture b</p>
-        {data.map((score) => (
-          <Player>
+        {data.map((score, index) => (
+          <Player key={index}>
             <p>name</p>
             <p>{score}</p>
           </Player>
@@ -37,8 +37,8 @@ const Highscores = () => {
       </div>
       <div>
         <p>Picture c</p>
-        {data.map((score) => (
-          <Player>
+        {data.map((score, index) => (
+          <Player key={index}>
             <p>name</p>
             <p>{score}</p>
           </Player>
