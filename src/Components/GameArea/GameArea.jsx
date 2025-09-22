@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
-import { styled, TextField } from "@mui/material";
+import { styled } from "@mui/material";
 import PictureA from "../../assets/PictureA.jpg";
+import { useState } from "react";
 
 const Base = styled("div")({
   display: "flex",
@@ -36,7 +37,7 @@ const Item = styled("div")(({ theme }) => ({
   marginLeft: "3%",
 }));
 
-const Picture = styled("main")({
+const Picture = styled("div")({
   display: "flex",
   flex: 2,
 });
@@ -48,6 +49,17 @@ const PictureContainer = styled("img")({
 
 const GameArea = () => {
   const params = useParams();
+  const [clickPos, setClickPos] = useState("");
+  const [disabledOnClick, setDisabledOnClick] = useState(false);
+
+  const handleImageClick = (event) => {
+    const bRect = event.target.getBoundingClientRect();
+
+    const x = event.clientX - bRect.left;
+    const y = event.clientY - bRect.top;
+    setClickPos({ x, y });
+    setDisabledOnClick(!disabledOnClick);
+  };
 
   return (
     <Base>
@@ -68,11 +80,23 @@ const GameArea = () => {
           <Item>Item C</Item>
         </ItemWrapper>
         <ItemWrapper sx={{ marginLeft: "15%" }}>Total guesses</ItemWrapper>
-        <ItemWrapper>Time: </ItemWrapper>
+        <ItemWrapper sx={{ marginLeft: "15%" }}>Time: </ItemWrapper>
+        <ItemWrapper>
+          {clickPos.x} {clickPos.y}
+        </ItemWrapper>
       </Sidebar>
       <Picture>
         {params.pictureID}
-        <PictureContainer src={PictureA} />
+        <PictureContainer
+          sx={{
+            userSelect: "none",
+            WebkitUserDrag: "none",
+            MozUserSelect: "none",
+            MsUserSelect: "none",
+          }}
+          onClick={disabledOnClick ? null : handleImageClick}
+          src={PictureA}
+        />
       </Picture>
     </Base>
   );
