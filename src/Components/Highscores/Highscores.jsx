@@ -1,4 +1,5 @@
 import { styled } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Base = styled("div")(({ theme }) => ({
   flex: 1,
@@ -7,6 +8,12 @@ const Base = styled("div")(({ theme }) => ({
   alignItems: "center",
   color: theme.palette.primary.main,
 }));
+
+const Back = styled(Link)({
+  color: "inherit",
+  textDecoration: "none",
+  alignSelf: "start",
+});
 
 const Player = styled("div")({
   display: "flex",
@@ -17,6 +24,7 @@ const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const Highscores = () => {
   return (
     <Base>
+      <Back to="/">&larr; Back</Back>
       <div>
         <p>Picture A</p>
         {data.map((score, index) => (
