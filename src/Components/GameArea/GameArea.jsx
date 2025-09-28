@@ -38,13 +38,31 @@ const Item = styled("div")(({ theme }) => ({
 }));
 
 const Picture = styled("div")({
-  display: "flex",
   flex: 2,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
 });
 
-const PictureContainer = styled("img")({
+const PictureWrapper = styled("div")({
+  display: "inline-block",
+  lineHeight: 0,
+  width: "fit-content",
   maxWidth: "80%",
-  margin: "auto",
+});
+
+const Options = styled("div")(({ $option, $left, $top }) => ({
+  width: "1px",
+  height: "1px",
+  position: "absolute",
+  display: "inline-block",
+  // left: $left,
+  // top: $top,
+}));
+
+const PictureContainer = styled("img")({
+  display: "block",
+  width: "100%",
 });
 
 const GameArea = () => {
@@ -58,7 +76,7 @@ const GameArea = () => {
     const x = event.clientX - bRect.left;
     const y = event.clientY - bRect.top;
     setClickPos({ x, y });
-    setDisabledOnClick(!disabledOnClick);
+    // setDisabledOnClick(!disabledOnClick);
   };
 
   return (
@@ -86,17 +104,27 @@ const GameArea = () => {
         </ItemWrapper>
       </Sidebar>
       <Picture>
-        {params.pictureID}
-        <PictureContainer
-          sx={{
-            userSelect: "none",
-            WebkitUserDrag: "none",
-            MozUserSelect: "none",
-            MsUserSelect: "none",
-          }}
-          onClick={disabledOnClick ? null : handleImageClick}
-          src={PictureA}
-        />
+        <PictureWrapper>
+          {/* <Options $left={"150px"} $top={"150px"}>
+            1
+          </Options>
+          <Options $left={"150px"} $top={"150px"}>
+            2
+          </Options>
+          <Options $left={"150px"} $top={"150px"}>
+            3
+          </Options> */}
+          <PictureContainer
+            sx={{
+              userSelect: "none",
+              WebkitUserDrag: "none",
+              MozUserSelect: "none",
+              MsUserSelect: "none",
+            }}
+            onClick={disabledOnClick ? null : handleImageClick}
+            src={PictureA}
+          />
+        </PictureWrapper>
       </Picture>
     </Base>
   );
