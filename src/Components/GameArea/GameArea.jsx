@@ -1,11 +1,17 @@
-import { useParams } from "react-router-dom";
-import { styled } from "@mui/material";
+import { useParams, Link } from "react-router-dom";
+import { styled, Button } from "@mui/material";
 import PictureA from "../../assets/PictureA.jpg";
 import { useState } from "react";
 
 const Base = styled("div")({
   display: "flex",
   width: "100%",
+});
+
+const Back = styled(Link)({
+  color: "inherit",
+  textDecoration: "none",
+  alignSelf: "start",
 });
 
 const Sidebar = styled("div")(({ theme }) => ({
@@ -49,15 +55,18 @@ const PictureWrapper = styled("div")({
   lineHeight: 0,
   width: "fit-content",
   maxWidth: "80%",
+  position: "relative",
 });
 
-const Options = styled("div")(({ $option, $left, $top }) => ({
-  width: "1px",
-  height: "1px",
+const Options = styled(Button)(({ show, option, left, top }) => ({
+  width: "100px",
+  height: "40px",
   position: "absolute",
-  display: "inline-block",
-  // left: $left,
-  // top: $top,
+  display: show,
+  justifyContent: "center",
+  alignItems: "center",
+  left: left + 45,
+  top: top + option - 20,
 }));
 
 const PictureContainer = styled("img")({
@@ -68,20 +77,25 @@ const PictureContainer = styled("img")({
 const GameArea = () => {
   const params = useParams();
   const [clickPos, setClickPos] = useState("");
-  const [disabledOnClick, setDisabledOnClick] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [pick, setPick] = useState(null);
 
   const handleImageClick = (event) => {
+    visible ? null : setVisible(true);
     const bRect = event.target.getBoundingClientRect();
-
     const x = event.clientX - bRect.left;
     const y = event.clientY - bRect.top;
     setClickPos({ x, y });
-    // setDisabledOnClick(!disabledOnClick);
+  };
+
+  const handleOnClick = (event) => {
+    setPick(event.target.textContent);
   };
 
   return (
     <Base>
       <Sidebar>
+        <Back to="/">&larr; Back</Back>
         <h1>Find</h1>
         <ItemWrapper>
           <Indicator sx={{ color: "red" }}>X</Indicator>
@@ -101,19 +115,41 @@ const GameArea = () => {
         <ItemWrapper sx={{ marginLeft: "15%" }}>Time: </ItemWrapper>
         <ItemWrapper>
           {clickPos.x} {clickPos.y}
+          {pick}
         </ItemWrapper>
       </Sidebar>
       <Picture>
         <PictureWrapper>
-          {/* <Options $left={"150px"} $top={"150px"}>
-            1
+          <Options
+            variant="contained"
+            show={visible ? "flex" : "none"}
+            left={clickPos.x}
+            top={clickPos.y}
+            option={-70}
+            onClick={handleOnClick}
+          >
+            Jordan
           </Options>
-          <Options $left={"150px"} $top={"150px"}>
-            2
+          <Options
+            variant="contained"
+            show={visible ? "flex" : "none"}
+            left={clickPos.x}
+            top={clickPos.y}
+            option={0}
+            onClick={handleOnClick}
+          >
+            Lebron
           </Options>
-          <Options $left={"150px"} $top={"150px"}>
-            3
-          </Options> */}
+          <Options
+            variant="contained"
+            show={visible ? "flex" : "none"}
+            left={clickPos.x}
+            top={clickPos.y}
+            option={+70}
+            onClick={handleOnClick}
+          >
+            Bryant
+          </Options>
           <PictureContainer
             sx={{
               userSelect: "none",
@@ -121,7 +157,7 @@ const GameArea = () => {
               MozUserSelect: "none",
               MsUserSelect: "none",
             }}
-            onClick={disabledOnClick ? null : handleImageClick}
+            onClick={handleImageClick}
             src={PictureA}
           />
         </PictureWrapper>
