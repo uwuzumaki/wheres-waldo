@@ -81,7 +81,7 @@ const GameArea = () => {
   const [pick, setPick] = useState(null);
 
   const handleImageClick = (event) => {
-    visible ? null : setVisible(true);
+    setVisible(!visible);
     const bRect = event.target.getBoundingClientRect();
     const x = event.clientX - bRect.left;
     const y = event.clientY - bRect.top;
