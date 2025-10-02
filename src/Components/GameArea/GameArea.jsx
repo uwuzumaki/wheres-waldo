@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { styled, Button } from "@mui/material";
 import PictureA from "../../assets/PictureA.jpg";
 import { useState } from "react";
+import axios from "axios";
 
 const Base = styled("div")({
   display: "flex",
@@ -88,8 +89,16 @@ const GameArea = () => {
     setClickPos({ x, y });
   };
 
-  const handleOnClick = (event) => {
+  const handleOnClick = async (event) => {
     setPick(event.target.textContent);
+    const url = `http://localhost:3000/picture/a`;
+    const gameData = { x: clickPos.x, y: clickPos.y, pick };
+    try {
+      const attempt = await axios.post(url, gameData);
+      console.log(attempt);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
