@@ -92,8 +92,13 @@ const GameArea = () => {
   const handleOnClick = async (event) => {
     setPick(event.target.textContent);
     const url = `http://localhost:3000/picture/a`;
-    const gameData = { x: clickPos.x, y: clickPos.y, pick };
+    const gameData = {
+      x: clickPos.x,
+      y: clickPos.y,
+      pick: event.target.textContent,
+    };
     try {
+      setVisible(!visible);
       const attempt = await axios.post(url, gameData);
       console.log(attempt);
     } catch (error) {
