@@ -86,16 +86,21 @@ const GameArea = () => {
     const bRect = event.target.getBoundingClientRect();
     const x = event.clientX - bRect.left;
     const y = event.clientY - bRect.top;
-    setClickPos({ x, y });
+    const width = bRect.width;
+    const height = bRect.height;
+    setClickPos({ x, y, width, height });
   };
 
   const handleOnClick = async (event) => {
-    setPick(event.target.textContent);
+    const pick = event.target.attributes.pick.value;
+    setPick(pick);
     const url = `http://localhost:3000/picture/a`;
     const gameData = {
       x: clickPos.x,
       y: clickPos.y,
-      pick: event.target.textContent,
+      width: clickPos.width,
+      height: clickPos.height,
+      pick: pick,
     };
     try {
       setVisible(!visible);
@@ -140,6 +145,7 @@ const GameArea = () => {
             left={clickPos.x}
             top={clickPos.y}
             option={-70}
+            pick={"obj1"}
             onClick={handleOnClick}
           >
             Jordan
@@ -150,6 +156,7 @@ const GameArea = () => {
             left={clickPos.x}
             top={clickPos.y}
             option={0}
+            pick={"obj2"}
             onClick={handleOnClick}
           >
             Lebron
@@ -160,6 +167,7 @@ const GameArea = () => {
             left={clickPos.x}
             top={clickPos.y}
             option={+70}
+            pick={"obj3"}
             onClick={handleOnClick}
           >
             Bryant
