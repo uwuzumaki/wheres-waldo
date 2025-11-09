@@ -51,7 +51,7 @@ const Home = () => {
       </Section>
       <Section>
         <CustomButton variant="contained">
-          <CustomLink to="/picture/a">Picture A</CustomLink>
+          <CustomLink to="/picture/kanagawa">Picture A</CustomLink>
         </CustomButton>
         <CustomButton variant="contained">
           <CustomLink to="/picture/b">Picture B</CustomLink>
