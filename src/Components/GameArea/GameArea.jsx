@@ -1,8 +1,10 @@
 import { useParams, Link } from "react-router-dom";
 import { styled, Button } from "@mui/material";
 import PictureA from "../../assets/PictureA.jpg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import dayjs from "dayjs";
+import prettyMilliseconds from "pretty-ms";
 
 const Base = styled("div")({
   display: "flex",
@@ -75,11 +77,60 @@ const PictureContainer = styled("img")({
   width: "100%",
 });
 
+const Modal = styled("div")(({ visible }) => ({
+  display: visible,
+  position: "fixed",
+  zIndex: 1,
+  paddingTop: "10%",
+  color: "white",
+  left: 0,
+  top: 0,
+  width: "100%",
+  height: "100%",
+  backgroundColor: "rgb(0, 0, 0)",
+  backgroundColor: "rgba(0, 0, 0, 0.4)",
+}));
+
+const ModalContent = styled("div")({
+  width: "80%",
+  height: "80%",
+  background: "black",
+  border: "1px solid white",
+  margin: "auto",
+  display: "flex",
+  flexDirection: "column",
+});
+
 const GameArea = () => {
   const params = useParams();
   const [clickPos, setClickPos] = useState("");
   const [visible, setVisible] = useState(false);
   const [pick, setPick] = useState(null);
+  const [gameStats, setGameStats] = useState({});
+
+  useEffect(() => {
+    const createAt = dayjs(localStorage.getItem("createAt"));
+    const sameDay = dayjs().isSame(createAt, "day");
+    const map = params.pictureID;
+    const fetchData = async () => {
+      try {
+        const url = `http://localhost:3000/picture/newPlayer`;
+        const res = await axios.post(
+          url,
+          { map },
+          {
+            withCredentials: true,
+          }
+        );
+        checkWin(res.data.id);
+        localStorage.setItem("id", res.data.id);
+        localStorage.setItem("createAt", res.data.createAt);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    sameDay ? null : fetchData();
+  }, []);
 
   const handleImageClick = (event) => {
     setVisible(!visible);
@@ -93,21 +144,46 @@ const GameArea = () => {
 
   const handleOnClick = async (event) => {
     const pick = event.target.attributes.pick.value;
+    const id = localStorage.getItem("id");
     setPick(pick);
-    const url = `http://localhost:3000/picture/a`;
+    const url = `http://localhost:3000/picture/map/a`;
     const gameData = {
       x: clickPos.x,
       y: clickPos.y,
       width: clickPos.width,
       height: clickPos.height,
       pick: pick,
+      id,
     };
     try {
       setVisible(!visible);
       const attempt = await axios.post(url, gameData);
       console.log(attempt);
+      const time = attempt.data.status
+        ? await checkWin(localStorage.getItem("id"))
+        : await checkWin(localStorage.getItem("id"));
+      console.log(time);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const checkWin = async (id) => {
+    try {
+      const url = `http://localhost:3000/picture/gameOver`;
+      const res = await axios.post(url, { id });
+      setGameStats({
+        endTime: prettyMilliseconds(res.data.totalTime, {
+          secondsDecimalDigits: 0,
+        }),
+      });
+      console.log(res);
+      // console.log(
+      //   prettyMilliseconds(res.data.time, { secondsDecimalDigits: 0 })
+      // );
+      return res;
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -138,6 +214,15 @@ const GameArea = () => {
         </ItemWrapper>
       </Sidebar>
       <Picture>
+        <Modal visible="block">
+          <ModalContent>
+            <div>time</div>
+            <div>
+              <div>home</div>
+              <div>highscore</div>
+            </div>
+          </ModalContent>
+        </Modal>
         <PictureWrapper>
           <Options
             variant="contained"
