@@ -112,10 +112,9 @@ const GameArea = () => {
 
   useEffect(() => {
     const createAt = dayjs(localStorage.getItem("createAt"));
-    const complete = localStorage.getItem("complete");
     const sameDay = dayjs().isSame(createAt, "day");
     const map = params.pictureID;
-    const fetchData = (async () => {
+    (async () => {
       try {
         if (!sameDay) {
           const url = `http://localhost:3000/picture/newPlayer`;
@@ -126,8 +125,6 @@ const GameArea = () => {
               withCredentials: true,
             }
           );
-          console.log(res.data);
-
           localStorage.setItem("createAt", res.data.createAt);
           localStorage.setItem("id", res.data.id);
           localStorage.setItem("complete", false);
@@ -142,7 +139,6 @@ const GameArea = () => {
               withCredentials: true,
             }
           );
-          console.log(res.data);
           localStorage.setItem("createAt", res.data.createAt);
           localStorage.setItem("id", res.data.id);
           setGameStats(
@@ -189,9 +185,7 @@ const GameArea = () => {
       setOptionsVisible(!optionsVisible);
       const attempt = await axios.post(url, gameData);
       console.log(attempt);
-      const winStatus = attempt.data.status
-        ? await checkWin(localStorage.getItem("id"))
-        : null;
+      attempt.data.status ? await checkWin(localStorage.getItem("id")) : null;
     } catch (error) {
       console.log(error);
     }
@@ -208,12 +202,6 @@ const GameArea = () => {
         })
       );
       setModalVisible(true);
-      // setGameStats(
-      //   prettyMilliseconds(res.data.finishAt, { secondsDecimalDigits: 0 })
-      // );
-      // console.log(
-      //   prettyMilliseconds(res.data.time, { secondsDecimalDigits: 0 })
-      // );
       return res;
     } catch (err) {
       console.log(err);
