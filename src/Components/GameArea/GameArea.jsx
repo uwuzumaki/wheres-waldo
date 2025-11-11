@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { styled, Button } from "@mui/material";
+import { styled, Button, Box, TextField } from "@mui/material";
 import PictureA from "../../assets/PictureA.jpg";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -99,41 +99,72 @@ const ModalContent = styled("div")({
   margin: "auto",
   display: "flex",
   flexDirection: "column",
+  justifyContent: "space-evenly",
+  alignItems: "center",
 });
 
 const GameArea = () => {
   const params = useParams();
   const [clickPos, setClickPos] = useState("");
-  const [visible, setVisible] = useState(false);
-  const [pick, setPick] = useState(null);
-  const [gameStats, setGameStats] = useState({});
+  const [optionsVisible, setOptionsVisible] = useState(false);
+  const [modalVisibile, setModalVisible] = useState(false);
+  const [gameStats, setGameStats] = useState(null);
 
   useEffect(() => {
     const createAt = dayjs(localStorage.getItem("createAt"));
+    const complete = localStorage.getItem("complete");
     const sameDay = dayjs().isSame(createAt, "day");
     const map = params.pictureID;
-    const fetchData = async () => {
+    const fetchData = (async () => {
       try {
-        const url = `http://localhost:3000/picture/newPlayer`;
-        const res = await axios.post(
-          url,
-          { map },
-          {
-            withCredentials: true,
-          }
-        );
-        checkWin(res.data.id);
-        localStorage.setItem("id", res.data.id);
-        localStorage.setItem("createAt", res.data.createAt);
+        if (!sameDay) {
+          const url = `http://localhost:3000/picture/newPlayer`;
+          const res = await axios.post(
+            url,
+            { map },
+            {
+              withCredentials: true,
+            }
+          );
+          console.log(res.data);
+
+          localStorage.setItem("createAt", res.data.createAt);
+          localStorage.setItem("id", res.data.id);
+          localStorage.setItem("complete", false);
+        } else {
+          console.log("456");
+          const id = localStorage.getItem("id");
+          const url = `http://localhost:3000/picture/currentPlayer`;
+          const res = await axios.post(
+            url,
+            { id },
+            {
+              withCredentials: true,
+            }
+          );
+          console.log(res.data);
+          localStorage.setItem("createAt", res.data.createAt);
+          localStorage.setItem("id", res.data.id);
+          setGameStats(
+            prettyMilliseconds(res.data.totalTime, {
+              secondsDecimalDigits: 0,
+            })
+          );
+        }
       } catch (error) {
         console.log(error);
       }
-    };
-    sameDay ? null : fetchData();
+    })();
   }, []);
 
+  useEffect(() => {
+    if (gameStats) {
+      setModalVisible(true);
+    }
+  }, [gameStats]);
+
   const handleImageClick = (event) => {
-    setVisible(!visible);
+    setOptionsVisible(!optionsVisible);
     const bRect = event.target.getBoundingClientRect();
     const x = event.clientX - bRect.left;
     const y = event.clientY - bRect.top;
@@ -145,8 +176,7 @@ const GameArea = () => {
   const handleOnClick = async (event) => {
     const pick = event.target.attributes.pick.value;
     const id = localStorage.getItem("id");
-    setPick(pick);
-    const url = `http://localhost:3000/picture/map/a`;
+    const url = `http://localhost:3000/picture/map/${params.pictureID}`;
     const gameData = {
       x: clickPos.x,
       y: clickPos.y,
@@ -156,28 +186,31 @@ const GameArea = () => {
       id,
     };
     try {
-      setVisible(!visible);
+      setOptionsVisible(!optionsVisible);
       const attempt = await axios.post(url, gameData);
       console.log(attempt);
-      const time = attempt.data.status
+      const winStatus = attempt.data.status
         ? await checkWin(localStorage.getItem("id"))
-        : await checkWin(localStorage.getItem("id"));
-      console.log(time);
+        : null;
     } catch (error) {
       console.log(error);
     }
   };
 
   const checkWin = async (id) => {
+    localStorage.setItem("complete", true);
     try {
       const url = `http://localhost:3000/picture/gameOver`;
       const res = await axios.post(url, { id });
-      setGameStats({
-        endTime: prettyMilliseconds(res.data.totalTime, {
+      setGameStats(
+        prettyMilliseconds(res.data.gameSession.totalTime, {
           secondsDecimalDigits: 0,
-        }),
-      });
-      console.log(res);
+        })
+      );
+      setModalVisible(true);
+      // setGameStats(
+      //   prettyMilliseconds(res.data.finishAt, { secondsDecimalDigits: 0 })
+      // );
       // console.log(
       //   prettyMilliseconds(res.data.time, { secondsDecimalDigits: 0 })
       // );
@@ -206,27 +239,41 @@ const GameArea = () => {
           </Indicator>
           <Item>Item C</Item>
         </ItemWrapper>
-        <ItemWrapper sx={{ marginLeft: "15%" }}>Total guesses</ItemWrapper>
         <ItemWrapper sx={{ marginLeft: "15%" }}>Time: </ItemWrapper>
-        <ItemWrapper>
-          {clickPos.x} {clickPos.y}
-          {pick}
-        </ItemWrapper>
       </Sidebar>
       <Picture>
-        <Modal visible="block">
+        <Modal visible={modalVisibile ? "block" : "none"}>
           <ModalContent>
-            <div>time</div>
-            <div>
-              <div>home</div>
-              <div>highscore</div>
-            </div>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Box>Your time was: {gameStats}</Box>
+              <Box>
+                <TextField>123</TextField>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                width: "100%",
+              }}
+            >
+              <Back to="/">Home</Back>
+              <Back to="/highscore">Highscores</Back>
+            </Box>
           </ModalContent>
         </Modal>
         <PictureWrapper>
           <Options
             variant="contained"
-            show={visible ? "flex" : "none"}
+            show={optionsVisible ? "flex" : "none"}
             left={clickPos.x}
             top={clickPos.y}
             option={-70}
@@ -237,7 +284,7 @@ const GameArea = () => {
           </Options>
           <Options
             variant="contained"
-            show={visible ? "flex" : "none"}
+            show={optionsVisible ? "flex" : "none"}
             left={clickPos.x}
             top={clickPos.y}
             option={0}
@@ -248,7 +295,7 @@ const GameArea = () => {
           </Options>
           <Options
             variant="contained"
-            show={visible ? "flex" : "none"}
+            show={optionsVisible ? "flex" : "none"}
             left={clickPos.x}
             top={clickPos.y}
             option={+70}
