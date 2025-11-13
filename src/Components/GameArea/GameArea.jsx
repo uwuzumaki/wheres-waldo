@@ -109,6 +109,7 @@ const GameArea = () => {
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [modalVisibile, setModalVisible] = useState(false);
   const [gameStats, setGameStats] = useState(null);
+  const [wasHighScore, setWasHighScore] = useState(false);
 
   useEffect(() => {
     const createAt = dayjs(localStorage.getItem("createAt"));
@@ -127,7 +128,6 @@ const GameArea = () => {
           );
           localStorage.setItem("createAt", res.data.createAt);
           localStorage.setItem("id", res.data.id);
-          localStorage.setItem("complete", false);
         } else {
           console.log("456");
           const id = localStorage.getItem("id");
@@ -191,16 +191,18 @@ const GameArea = () => {
     }
   };
 
+  // Check highscore function
   const checkWin = async (id) => {
-    localStorage.setItem("complete", true);
     try {
       const url = `http://localhost:3000/picture/gameOver`;
       const res = await axios.post(url, { id });
+      console.log(res);
       setGameStats(
-        prettyMilliseconds(res.data.gameSession.totalTime, {
+        prettyMilliseconds(res.data.session.totalTime, {
           secondsDecimalDigits: 0,
         })
       );
+      setWasHighScore(res.data.newHighscore);
       setModalVisible(true);
       return res;
     } catch (err) {
@@ -241,9 +243,21 @@ const GameArea = () => {
               }}
             >
               <Box>Your time was: {gameStats}</Box>
-              <Box>
-                <TextField>123</TextField>
-              </Box>
+              {wasHighScore && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box>
+                    Congrats! That's a highscore! Please enter your name:{" "}
+                  </Box>
+                  <TextField sx={{ marginX: "auto" }}></TextField>
+                </Box>
+              )}
             </Box>
             <Box
               sx={{
