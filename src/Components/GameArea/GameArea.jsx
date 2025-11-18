@@ -77,12 +77,12 @@ const PictureContainer = styled("img")({
   width: "100%",
 });
 
-const Modal = styled("div")(({ visible }) => ({
+const Modal = styled("div")(({ visible, theme }) => ({
   display: visible,
   position: "fixed",
   zIndex: 1,
   paddingTop: "10%",
-  color: "white",
+  color: theme.palette.primary.main,
   left: 0,
   top: 0,
   width: "100%",
@@ -91,17 +91,34 @@ const Modal = styled("div")(({ visible }) => ({
   backgroundColor: "rgba(0, 0, 0, 0.4)",
 }));
 
-const ModalContent = styled("div")({
+const ModalContent = styled("div")(({ theme }) => ({
   width: "80%",
-  height: "80%",
-  background: "black",
+  height: "60%",
+  background: theme.palette.secondary.light,
   border: "1px solid white",
   margin: "auto",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-evenly",
   alignItems: "center",
-});
+}));
+
+const HighScoreInput = styled(TextField)(({ theme }) => ({
+  marginX: "auto",
+  color: "black",
+  "& .MuiInputBase-input": {
+    color: theme.palette.primary.main,
+  },
+  "& .MuiInputLabel-root": {
+    color: theme.palette.primary.main,
+  },
+  "&:hover .MuiInput-underline:before": {
+    borderBottomColor: theme.palette.primary.main,
+  },
+  "& .MuiInput-underline:before": {
+    borderBottomColor: theme.palette.primary.main,
+  },
+}));
 
 const GameArea = () => {
   const params = useParams();
@@ -240,6 +257,7 @@ const GameArea = () => {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
+                width: "100%",
               }}
             >
               <Box>Your time was: {gameStats}</Box>
@@ -250,12 +268,18 @@ const GameArea = () => {
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
+                    width: "100%",
                   }}
                 >
-                  <Box>
+                  <Box sx={{ padding: "5%" }}>
                     Congrats! That's a highscore! Please enter your name:{" "}
                   </Box>
-                  <TextField sx={{ marginX: "auto" }}></TextField>
+                  <HighScoreInput
+                    label="Name"
+                    autoFocus="true"
+                    variant="standard"
+                    color="primary"
+                  ></HighScoreInput>
                 </Box>
               )}
             </Box>
