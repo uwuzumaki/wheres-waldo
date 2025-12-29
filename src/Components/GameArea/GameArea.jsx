@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { styled, Button, Box, TextField } from "@mui/material";
 import PictureA from "../../assets/PictureA.jpg";
 import { useState, useEffect } from "react";
@@ -104,8 +104,7 @@ const ModalContent = styled("div")(({ theme }) => ({
 }));
 
 const HighScoreInput = styled(TextField)(({ theme }) => ({
-  marginX: "auto",
-  color: "black",
+  marginRight: "1rem",
   "& .MuiInputBase-input": {
     color: theme.palette.primary.main,
   },
@@ -122,11 +121,13 @@ const HighScoreInput = styled(TextField)(({ theme }) => ({
 
 const GameArea = () => {
   const params = useParams();
+  let nav = useNavigate();
   const [clickPos, setClickPos] = useState("");
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [modalVisibile, setModalVisible] = useState(false);
   const [gameStats, setGameStats] = useState(null);
   const [wasHighScore, setWasHighScore] = useState(false);
+  const [highScoreName, setHighScorename] = useState("");
 
   useEffect(() => {
     const createAt = dayjs(localStorage.getItem("createAt"));
@@ -227,6 +228,25 @@ const GameArea = () => {
     }
   };
 
+  const handleChange = (event) => {
+    console.log(event.target.value);
+    setHighScorename(event.target.value);
+  };
+
+  const handleUpdate = async () => {
+    const session = localStorage.getItem("id");
+    const name = highScoreName;
+    try {
+      const url = `http://localhost:3000/picture/updateHighScore`;
+      const res = await axios.post(url, { session, name });
+      setModalVisible(false);
+      console.log(res);
+      nav("/highscores");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Base>
       <Sidebar>
@@ -274,12 +294,24 @@ const GameArea = () => {
                   <Box sx={{ padding: "5%" }}>
                     Congrats! That's a highscore! Please enter your name:{" "}
                   </Box>
-                  <HighScoreInput
-                    label="Name"
-                    autoFocus="true"
-                    variant="standard"
-                    color="primary"
-                  ></HighScoreInput>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "flex-end",
+                      width: "100%",
+                    }}
+                  >
+                    <HighScoreInput
+                      label="Name"
+                      autoFocus="true"
+                      variant="standard"
+                      color="primary"
+                      value={highScoreName}
+                      onChange={handleChange}
+                    ></HighScoreInput>
+                    <Button onClick={handleUpdate}>Submit</Button>
+                  </Box>
                 </Box>
               )}
             </Box>
@@ -292,7 +324,7 @@ const GameArea = () => {
               }}
             >
               <Back to="/">Home</Back>
-              <Back to="/highscore">Highscores</Back>
+              <Back to="/highscores">Highscores</Back>
             </Box>
           </ModalContent>
         </Modal>
