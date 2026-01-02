@@ -128,6 +128,11 @@ const GameArea = () => {
   const [gameStats, setGameStats] = useState(null);
   const [wasHighScore, setWasHighScore] = useState(false);
   const [highScoreName, setHighScorename] = useState("");
+  const [foundObjs, setFoundObjs] = useState({
+    obj1: false,
+    obj2: false,
+    obj3: false,
+  });
 
   useEffect(() => {
     const createAt = dayjs(localStorage.getItem("createAt"));
@@ -147,7 +152,6 @@ const GameArea = () => {
           localStorage.setItem("createAt", res.data.createAt);
           localStorage.setItem("id", res.data.id);
         } else {
-          console.log("456");
           const id = localStorage.getItem("id");
           const url = `http://localhost:3000/picture/currentPlayer`;
           const res = await axios.post(
@@ -164,6 +168,7 @@ const GameArea = () => {
               secondsDecimalDigits: 0,
             })
           );
+          setFoundObjs({ obj1: true, obj2: true, obj3: true });
         }
       } catch (error) {
         console.log(error);
@@ -203,6 +208,9 @@ const GameArea = () => {
       setOptionsVisible(!optionsVisible);
       const attempt = await axios.post(url, gameData);
       console.log(attempt);
+      attempt.data.result
+        ? setFoundObjs((objs) => ({ ...objs, [attempt.data.pick]: true }))
+        : null;
       attempt.data.status ? await checkWin(localStorage.getItem("id")) : null;
     } catch (error) {
       console.log(error);
@@ -253,20 +261,23 @@ const GameArea = () => {
         <Back to="/">&larr; Back</Back>
         <h1>Find</h1>
         <ItemWrapper>
-          <Indicator sx={{ color: "red" }}>X</Indicator>
+          <Indicator sx={{ color: foundObjs.obj1 ? "green" : "red" }}>
+            {foundObjs.obj1 ? <>&#10004;</> : "X"}
+          </Indicator>
           <Item>Item A</Item>
         </ItemWrapper>
         <ItemWrapper>
-          <Indicator sx={{ color: "red" }}>X</Indicator>
+          <Indicator sx={{ color: foundObjs.obj2 ? "green" : "red" }}>
+            {foundObjs.obj2 ? <>&#10004;</> : "X"}
+          </Indicator>
           <Item>Item B</Item>
         </ItemWrapper>
         <ItemWrapper>
-          <Indicator sx={{ color: "Green" }}>
-            <>&#10004;</>
+          <Indicator sx={{ color: foundObjs.obj3 ? "green" : "red" }}>
+            {foundObjs.obj3 ? <>&#10004;</> : "X"}
           </Indicator>
           <Item>Item C</Item>
         </ItemWrapper>
-        <ItemWrapper sx={{ marginLeft: "15%" }}>Time: </ItemWrapper>
       </Sidebar>
       <Picture>
         <Modal visible={modalVisibile ? "block" : "none"}>
