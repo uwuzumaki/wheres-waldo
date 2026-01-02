@@ -39,7 +39,9 @@ const Home = () => {
     <Base>
       <Section>
         <CustomButton variant="contained">
-          <CustomLink to="/picture/kanagawa">Picture A</CustomLink>
+          <CustomLink to="/picture/kanagawa">
+            The Great Wave off Kanagawa
+          </CustomLink>
         </CustomButton>
         {/* <CustomButton variant="contained">
           <CustomLink to="/picture/b">Picture B</CustomLink>

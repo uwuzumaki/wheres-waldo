@@ -15,6 +15,7 @@ const Back = styled(Link)({
   color: "inherit",
   textDecoration: "none",
   alignSelf: "start",
+  margin: "15%",
 });
 
 const Sidebar = styled("div")(({ theme }) => ({
@@ -259,24 +260,23 @@ const GameArea = () => {
     <Base>
       <Sidebar>
         <Back to="/">&larr; Back</Back>
-        <h1>Find</h1>
         <ItemWrapper>
           <Indicator sx={{ color: foundObjs.obj1 ? "green" : "red" }}>
             {foundObjs.obj1 ? <>&#10004;</> : "X"}
           </Indicator>
-          <Item>Item A</Item>
+          <Item>Men 1</Item>
         </ItemWrapper>
         <ItemWrapper>
           <Indicator sx={{ color: foundObjs.obj2 ? "green" : "red" }}>
             {foundObjs.obj2 ? <>&#10004;</> : "X"}
           </Indicator>
-          <Item>Item B</Item>
+          <Item>Volanco</Item>
         </ItemWrapper>
         <ItemWrapper>
           <Indicator sx={{ color: foundObjs.obj3 ? "green" : "red" }}>
             {foundObjs.obj3 ? <>&#10004;</> : "X"}
           </Indicator>
-          <Item>Item C</Item>
+          <Item>Fur</Item>
         </ItemWrapper>
       </Sidebar>
       <Picture>
@@ -349,7 +349,7 @@ const GameArea = () => {
             pick={"obj1"}
             onClick={handleOnClick}
           >
-            Jordan
+            Men 1
           </Options>
           <Options
             variant="contained"
@@ -360,7 +360,7 @@ const GameArea = () => {
             pick={"obj2"}
             onClick={handleOnClick}
           >
-            Lebron
+            Volnaco
           </Options>
           <Options
             variant="contained"
@@ -371,7 +371,7 @@ const GameArea = () => {
             pick={"obj3"}
             onClick={handleOnClick}
           >
-            Bryant
+            Fur
           </Options>
           <PictureContainer
             sx={{
