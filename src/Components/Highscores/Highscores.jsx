@@ -1,12 +1,13 @@
 import { styled } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import prettyMilliseconds from "pretty-ms";
 
 const Base = styled("div")(({ theme }) => ({
   flex: 1,
   display: "flex",
-  justifyContent: "space-evenly",
+  justifyContent: "start",
   alignItems: "center",
   color: theme.palette.primary.main,
 }));
@@ -15,28 +16,52 @@ const Back = styled(Link)({
   color: "inherit",
   textDecoration: "none",
   alignSelf: "start",
+  width: "10%",
+  marginTop: "5%",
+  marginLeft: "5%",
+});
+
+const PlayerContainer = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  width: "20%",
+  marginLeft: "5%",
 });
 
 const Player = styled("div")({
   display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
 });
 
-const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const PlayerName = styled("div")({
+  marginRight: "20%",
+});
 
 const Highscores = () => {
-  useEffect(() => {});
+  const [highScores, setHighScores] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const url = "http://localhost:3000/highscores";
+      const res = await axios.get(url, { withCredentials: true });
+      setHighScores(res.data);
+      console.log(res.data);
+    })();
+  }, []);
+
   return (
     <Base>
       <Back to="/">&larr; Back</Back>
-      <div>
-        <p>Picture A</p>
-        {data.map((score, index) => (
-          <Player key={index}>
-            <p>name</p>
-            <p>{score}</p>
+      <PlayerContainer>
+        <p style={{ fontSize: "2rem" }}>The Great Wave off Kanagawa</p>
+        {highScores.map((map) => (
+          <Player key={map.id}>
+            <PlayerName>{map.username}</PlayerName>
+            <p>{prettyMilliseconds(map.time, { secondsDecimalDigits: 0 })}</p>
           </Player>
         ))}
-      </div>
+      </PlayerContainer>
       {/* <div>
         <p>Picture b</p>
         {data.map((score, index) => (
