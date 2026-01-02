@@ -1,5 +1,7 @@
 import { styled } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Base = styled("div")(({ theme }) => ({
   flex: 1,
@@ -22,6 +24,7 @@ const Player = styled("div")({
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const Highscores = () => {
+  useEffect(() => {});
   return (
     <Base>
       <Back to="/">&larr; Back</Back>
@@ -34,7 +37,7 @@ const Highscores = () => {
           </Player>
         ))}
       </div>
-      <div>
+      {/* <div>
         <p>Picture b</p>
         {data.map((score, index) => (
           <Player key={index}>
@@ -51,7 +54,7 @@ const Highscores = () => {
             <p>{score}</p>
           </Player>
         ))}
-      </div>
+      </div> */}
     </Base>
   );
 };
