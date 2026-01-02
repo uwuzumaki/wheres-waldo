@@ -38,27 +38,15 @@ const Home = () => {
   return (
     <Base>
       <Section>
-        <CustomTextField
-          label="Enter a Name"
-          variant="standard"
-          focused
-          sx={{
-            input: {
-              color: "primary.main",
-            },
-          }}
-        />
-      </Section>
-      <Section>
         <CustomButton variant="contained">
           <CustomLink to="/picture/kanagawa">Picture A</CustomLink>
         </CustomButton>
-        <CustomButton variant="contained">
+        {/* <CustomButton variant="contained">
           <CustomLink to="/picture/b">Picture B</CustomLink>
         </CustomButton>
         <CustomButton variant="contained">
           <CustomLink to="/picture/c">Picture C</CustomLink>
-        </CustomButton>
+        </CustomButton> */}
       </Section>
       <Section>
         <CustomLink to="/highscores">
