@@ -207,7 +207,9 @@ const GameArea = () => {
     };
     try {
       setOptionsVisible(!optionsVisible);
-      const attempt = await axios.post(url, gameData);
+      const attempt = await axios.post(url, gameData, {
+        withCredentials: true,
+      });
       console.log(attempt);
       attempt.data.result
         ? setFoundObjs((objs) => ({ ...objs, [attempt.data.pick]: true }))
@@ -222,7 +224,7 @@ const GameArea = () => {
   const checkWin = async (id) => {
     try {
       const url = `${import.meta.env.VITE_URL}/picture/gameOver`;
-      const res = await axios.post(url, { id });
+      const res = await axios.post(url, { id }, { withCredentials: true });
       console.log(res);
       setGameStats(
         prettyMilliseconds(res.data.session.totalTime, {
@@ -247,7 +249,11 @@ const GameArea = () => {
     const name = highScoreName;
     try {
       const url = `${import.meta.env.VITE_URL}/picture/updateHighScore`;
-      const res = await axios.post(url, { session, name });
+      const res = await axios.post(
+        url,
+        { session, name },
+        { withCredentials: true }
+      );
       setModalVisible(false);
       console.log(res);
       nav("/highscores");
