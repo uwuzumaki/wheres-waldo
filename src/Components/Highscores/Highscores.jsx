@@ -43,7 +43,7 @@ const Highscores = () => {
 
   useEffect(() => {
     (async () => {
-      const url = "http://localhost:3000/highscores";
+      const url = `${import.meta.VITE_URL}/highscores`;
       const res = await axios.get(url, { withCredentials: true });
       setHighScores(res.data);
       console.log(res.data);

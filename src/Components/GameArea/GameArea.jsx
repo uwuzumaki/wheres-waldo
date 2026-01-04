@@ -142,7 +142,7 @@ const GameArea = () => {
     (async () => {
       try {
         if (!sameDay) {
-          const url = `http://localhost:3000/picture/newPlayer`;
+          const url = `${import.meta.VITE_URL}/picture/newPlayer`;
           const res = await axios.post(
             url,
             { map },
@@ -154,7 +154,7 @@ const GameArea = () => {
           localStorage.setItem("id", res.data.id);
         } else {
           const id = localStorage.getItem("id");
-          const url = `http://localhost:3000/picture/currentPlayer`;
+          const url = `${import.meta.VITE_URL}/picture/currentPlayer`;
           const res = await axios.post(
             url,
             { id },
@@ -196,7 +196,7 @@ const GameArea = () => {
   const handleOnClick = async (event) => {
     const pick = event.target.attributes.pick.value;
     const id = localStorage.getItem("id");
-    const url = `http://localhost:3000/picture/map/${params.pictureID}`;
+    const url = `${import.meta.VITE_URL}/picture/map/${params.pictureID}`;
     const gameData = {
       x: clickPos.x,
       y: clickPos.y,
@@ -221,7 +221,7 @@ const GameArea = () => {
   // Check highscore function
   const checkWin = async (id) => {
     try {
-      const url = `http://localhost:3000/picture/gameOver`;
+      const url = `${import.meta.VITE_URL}/picture/gameOver`;
       const res = await axios.post(url, { id });
       console.log(res);
       setGameStats(
@@ -246,7 +246,7 @@ const GameArea = () => {
     const session = localStorage.getItem("id");
     const name = highScoreName;
     try {
-      const url = `http://localhost:3000/picture/updateHighScore`;
+      const url = `${import.meta.VITE_URL}/picture/updateHighScore`;
       const res = await axios.post(url, { session, name });
       setModalVisible(false);
       console.log(res);
