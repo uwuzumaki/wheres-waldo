@@ -142,7 +142,7 @@ const GameArea = () => {
     (async () => {
       try {
         if (!sameDay) {
-          const url = `${import.meta.env.env.VITE_URL}/picture/newPlayer`;
+          const url = `${import.meta.env.VITE_URL}/picture/newPlayer`;
           const res = await axios.post(
             url,
             { map },
